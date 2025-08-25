@@ -25,6 +25,15 @@ export async function signup(req, res) {
       isOnboarded: false,
     });
     // TODO: Create the user in the stream as well
+    try {
+      await upsertStreamUser({
+        id: newUser,
+        name: newUser.fullName,
+        image: newUser.profilePic || "",
+      });
+    } catch (error) {
+      console.log("Error creating stream user: ", error);
+    }
 
     const token = jwt.sign(
       { userId: newUser._id },
@@ -84,5 +93,5 @@ export async function login(req, res) {
 
 export function logout(req, res) {
   res.clearCookie("jwt");
-  res.status(200).json({ succes: true,message:"Successful logout" });
+  res.status(200).json({ succes: true, message: "Successful logout" });
 }
