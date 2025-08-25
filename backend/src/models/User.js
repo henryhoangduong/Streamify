@@ -57,4 +57,11 @@ userSchema.pre("save", async function (next) {
     next(error);
   }
 });
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  const isPasswordCorrect = await bcrypt.compare(
+    enteredPassword,
+    this.password
+  );
+  return isPasswordCorrect;
+};
 export default User;
