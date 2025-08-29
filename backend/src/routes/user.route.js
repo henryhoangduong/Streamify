@@ -6,13 +6,15 @@ import {
   sendFriendRequest,
   acceptFriendRequest,
   getFriendRequests,
+  getOutGoingFriendReqs,
 } from "../controllers/user.controller.js";
 export const router = Router();
 router.use(protectRoute);
 
 router.get("/", getRecommendedUsers);
-
 router.get("/friends", getMyFriends);
+
 router.post("/friend-request/:id", sendFriendRequest);
 router.put("/friend-request/:id/accept", acceptFriendRequest);
 router.put("/friend-requests", getFriendRequests);
+router.get("/outgoing-friend-requests", getOutGoingFriendReqs);
