@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import { upsertStreamUser } from "../lib/stream.js";
 import jwt from "jsonwebtoken";
 export async function signup(req, res) {
   const { email, password, fullName } = req.body;
@@ -16,7 +17,7 @@ export async function signup(req, res) {
       return res.status(400).json({ message: "User already exists" });
     }
     const idx = Math.floor(Math.random() * 100) + 1;
-    const randomAvatar = `https://avatar.iran.liara.run/public/public/${idx}.png`;
+    const randomAvatar = `https://avatar.iran.liara.run/public/${idx}.png`;
     const newUser = await User.create({
       email,
       fullName,
@@ -99,6 +100,7 @@ export function logout(req, res) {
 export async function onboard(req, res) {
   try {
     const userId = req.user._id;
+    console.log(req.body);
     const { fullName, bio, nativeLanguage, learningLanguage, location } =
       req.body;
     if (

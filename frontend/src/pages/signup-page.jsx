@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ShipWheelIcon } from "lucide-react";
+import { Loader2, ShipWheelIcon } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../lib/axios";
-
+import image from "../../public/i.png";
+import { signup } from "../lib/api";
 const SignUpPage = () => {
   const [signUpData, setSignUpData] = useState({
     fullName: "",
@@ -11,16 +12,13 @@ const SignUpPage = () => {
     password: "",
   });
   const queryClient = useQueryClient();
-  const { mutate, isPending } = useMutation({
-    mutationFn: async () => {
-      const response = await axiosInstance.post("/auth/signup", signUpData);
-      return response.data;
-    },
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: signup,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"] }),
   });
   const handleSignUp = async (e) => {
     e.preventDefault();
-    mutate();
+    mutate(signUpData);
   };
   return (
     <div
@@ -35,6 +33,14 @@ const SignUpPage = () => {
             <ShipWheelIcon className="w-9 h-9 text" />
             <span className="text-3xl font-bold ">Streamify</span>
           </div>
+
+          {/* ERROR MESSAGE */}
+          {error && (
+            <div className="alert alert-error mb-4">
+              <span>{error.response.data.message} </span>
+            </div>
+          )}
+
           {/* FORM */}
           <div className="w-full">
             <form onSubmit={handleSignUp}>
@@ -130,8 +136,13 @@ const SignUpPage = () => {
                   </label>
                 </div>
               </div>
-              <button className="btn btn-primary w-full" type="submit">
-                Create Account
+              <button
+                disabled={isPending}
+                className="btn btn-primary w-full"
+                type="submit"
+              >
+                {isPending && <Loader2 className="animate-spin" />} Create
+                Account
               </button>
               <div className="text-center mt-4">
                 <p className="text-sm">
@@ -142,6 +153,24 @@ const SignUpPage = () => {
                 </p>
               </div>
             </form>
+          </div>
+        </div>
+        {/* SIGNUP FORM - RIGHT SIDE */}
+        <div className="hidden lg:flex w-full lg:w-1/2 bg-primary/10 items-center justify-center">
+          <div className="max-w-md p-8">
+            {/* ILLUSTRATION */}
+            <div className="relative aspect-square max-w-sm max-auto">
+              <img src={image} alt="image" />
+            </div>
+            <div className="text-center space-y-3 mx-auto">
+              <h2 className="text-xl font-semibold">
+                Connect with language partners worldwide
+              </h2>
+              <p className="opacity-70">
+                Practice conversations, make friends, and improve your language
+                skills toghether
+              </p>
+            </div>
           </div>
         </div>
       </div>

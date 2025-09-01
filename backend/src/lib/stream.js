@@ -1,4 +1,4 @@
-import StreamChat from "stream-chat";
+import { StreamChat } from "stream-chat";
 import "dotenv/config";
 
 const apiKey = process.env.STEAM_API_KEY;
@@ -10,9 +10,9 @@ if (!apiKey || !apiSecret) {
 
 const streamClient = StreamChat.getInstance(apiKey, apiSecret);
 
-export const createStreamUser = async (userData) => {
+export const upsertStreamUser = async (userData) => {
   try {
-    const userData = await streamClient.upsertUsers([userData]);
+    await streamClient.upsertUsers([userData]);
     return userData;
   } catch (error) {
     console.error("Error creating stream user: ", error);

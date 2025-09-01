@@ -16,3 +16,10 @@ router.post("/login", login);
 router.get("/logout", logout);
 
 router.post("/onboarding", protectRoute, onboard);
+
+router.get("/me", protectRoute, async (req, res) => {
+  return res.status(200).json({
+    success: true,
+    user: req.user,
+  });
+});
