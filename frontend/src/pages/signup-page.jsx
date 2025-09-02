@@ -1,8 +1,7 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2, ShipWheelIcon } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { axiosInstance } from "../lib/axios";
 import image from "../../public/i.png";
 import { signup } from "../lib/api";
 const SignUpPage = () => {

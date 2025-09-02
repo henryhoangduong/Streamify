@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import { upsertStreamUser } from "../lib/stream.js";
 import jwt from "jsonwebtoken";
+
 export async function signup(req, res) {
   const { email, password, fullName } = req.body;
   try {
@@ -66,13 +67,13 @@ export async function login(req, res) {
   }
   try {
     const user = await User.findOne({ email });
-    if (!user) {
+    if (!user)
       return res.status(401).json({ message: "Invalid email or password" });
-    }
+
     const isPasswordCorrect = await user.matchPassword(password);
-    if (!isPasswordCorrect) {
+    if (!isPasswordCorrect)
       return res.status(401).json({ message: "Invalid email or password" });
-    }
+
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
       expiresIn: "7d",
     });
