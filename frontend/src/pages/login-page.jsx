@@ -4,18 +4,16 @@ import { login } from "../lib/api";
 import { ShipWheelIcon } from "lucide-react";
 import image from "../../public/i.png";
 import { Loader2 } from "lucide-react";
+import useLogin from "../hooks/useLogin";
 const LoginPage = () => {
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   });
-  const { mutate, isPending, error } = useMutation({
-    mutationFn: login,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"] }),
-  });
+  const { isPending, error, mutate: loginMutate } = useLogin();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    mutate(loginData);
+    loginMutate(loginData);
   };
   const queryClient = useQueryClient();
   return (
