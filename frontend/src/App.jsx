@@ -10,6 +10,7 @@ import ChatPage from "./pages/chat-page.jsx";
 import { Navigate } from "react-router-dom";
 import PageLoader from "./components/PageLoader.jsx";
 import useAuthUser from "./hooks/useAuthUser.js";
+import { Layout } from "./components/Layout.jsx";
 function App() {
   const { authUser, isLoading } = useAuthUser();
   if (isLoading) {
@@ -24,7 +25,9 @@ function App() {
           path="/"
           element={
             isAuthenticated && isOnboarded ? (
-              <HomePage />
+              <Layout showSidear={true} >
+                <HomePage />
+              </Layout>
             ) : (
               <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
             )

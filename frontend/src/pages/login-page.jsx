@@ -15,7 +15,6 @@ const LoginPage = () => {
     e.preventDefault();
     loginMutate(loginData);
   };
-  const queryClient = useQueryClient();
   return (
     <div
       className="h-screen flex items-center justify-center p-4 sm:p-6 md:p-8"
@@ -35,7 +34,7 @@ const LoginPage = () => {
           {/* ERROR MESSAGING DISPLAY */}
           {error && (
             <div className="alert alert-error mb-4">
-              <span>{error.response.data.message} </span>
+              <span>{error.response?.data?.message} </span>
             </div>
           )}
           <div className="w-full">
