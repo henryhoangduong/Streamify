@@ -11,21 +11,24 @@ import { Navigate } from "react-router-dom";
 import PageLoader from "./components/PageLoader.jsx";
 import useAuthUser from "./hooks/useAuthUser.js";
 import { Layout } from "./components/Layout.jsx";
+import { useThemeStore } from "./store/useThemeStore.js";
 function App() {
   const { authUser, isLoading } = useAuthUser();
+  const { theme } = useThemeStore();
   if (isLoading) {
     return <PageLoader />;
   }
   const isAuthenticated = Boolean(authUser);
+  console.log("isAuthenticated: ", isAuthenticated);
   const isOnboarded = authUser?.isOnboarded;
   return (
-    <div className="h-screen" data-theme="forest">
+    <div className="h-screen" data-theme={theme}>
       <Routes>
         <Route
           path="/"
           element={
             isAuthenticated && isOnboarded ? (
-              <Layout showSidear={true} >
+              <Layout showSidear={true}>
                 <HomePage />
               </Layout>
             ) : (
