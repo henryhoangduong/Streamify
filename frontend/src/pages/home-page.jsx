@@ -8,6 +8,8 @@ import {
 } from "../lib/api";
 import { Link } from "react-router-dom";
 import { UsersIcon } from "lucide-react";
+import FriendCard from "../components/FriendCard";
+import NoFriendsFound from "../components/NoFriendsFound";
 
 const HomePage = () => {
   const queryClient = useQueryClient();
@@ -57,14 +59,12 @@ const HomePage = () => {
             <span className="loading loading-spinner loading-lg" />
           </div>
         ) : friends.length == 0 ? (
-          <p>No friend yet</p>
+          <NoFriendsFound />
         ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {
-                  friends.map((friend) => (
-                    <FriendCard key={ friend._id} friend={friend} />
-                  ))
-                }
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {friends.map((friend) => (
+              <FriendCard key={friend._id} friend={friend} />
+            ))}
           </div>
         )}
       </div>
