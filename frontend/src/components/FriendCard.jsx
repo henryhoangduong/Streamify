@@ -12,7 +12,7 @@ const FriendCard = (friend) => {
           </div>
           <h3>{friend.fullName}</h3>
         </div>
-        {/* ACTIONS */}
+        {/* LANGUAGE WITH FLAGS */}
         <div className="flex flex-wrap gap-1.5 mb-3">
           <span>
             {getLanguageFlag(friend.nativeLanguage)} Native:{" "}
