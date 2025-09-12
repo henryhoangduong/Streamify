@@ -149,6 +149,9 @@ export const getOutGoingFriendReqs = async (req, res) => {
       "recipient",
       "fullName profilePic nativeLanguage learningLanguage"
     );
+    return res.status(200).json({
+      outgoingRequests,
+    });
   } catch (error) {
     console.error("Error in getOutGoingFriendReqs controller", error);
     return res.status(500).json({ message: "Internal server error" });
