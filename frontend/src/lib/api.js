@@ -29,16 +29,16 @@ export const logout = async () => {
   return res.data;
 };
 export const getUserFriends = async () => {
-  const res = await axiosInstance.get("/users/friends");
+  const res = await axiosInstance.get("/user/friends");
   return res.data;
 };
 export const getRecommendedUsers = async () => {
-  const res = await axiosInstance.get("/users");
+  const res = await axiosInstance.get("/user");
   return res.data;
 };
 
 export const getOutGoingFriendReqs = async () => {
-  const res = await axiosInstance.get("/users/outgoing-friend-requests");
+  const res = await axiosInstance.get("/user/outgoing-friend-requests");
   return res.data;
 };
 
@@ -47,4 +47,21 @@ export const sendFriendRequest = async (userId) => {
     `/users/outgoing-friend-requests/${userId}`
   );
   return res.data;
+};
+
+export const getFriendRequest = async () => {
+  const res = await axiosInstance.get(`/user/outgoing-friend-requests`);
+  return res.data;
+};
+
+export const accpetFriendRequest = async (requestId) => {
+  const res = await axiosInstance.get(
+    `/user/friend-request/${requestId}/accept`
+  );
+  return res.data;
+};
+
+export const getStreamToken = async () => {
+  const response = await axiosInstance.get("/chat/token");
+  return response.data;
 };

@@ -2,3 +2,4 @@
 @plugin "daisyui" {
   themes: all;
 }
+@import "~stream-chat-react/dist/scss/v2/index.scss";

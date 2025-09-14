@@ -23,6 +23,7 @@ const FriendCard = (friend) => {
             {friend.learningLanguage}
           </span>
         </div>
+        <Link to={`/chat/${friend._id}`}>Message</Link>
       </div>
     </div>
   );

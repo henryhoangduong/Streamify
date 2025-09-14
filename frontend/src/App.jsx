@@ -15,12 +15,14 @@ import { useThemeStore } from "./store/useThemeStore.js";
 function App() {
   const { authUser, isLoading } = useAuthUser();
   const { theme } = useThemeStore();
+
   if (isLoading) {
     return <PageLoader />;
   }
+
   const isAuthenticated = Boolean(authUser);
-  console.log("isAuthenticated: ", isAuthenticated);
   const isOnboarded = authUser?.isOnboarded;
+
   return (
     <div className="h-screen" data-theme={theme}>
       <Routes>
@@ -51,9 +53,15 @@ function App() {
           }
         />
         <Route
-          path="/notification"
+          path="/notifications"
           element={
-            isAuthenticated ? <NotificationPage /> : <Navigate to={"/login"} />
+            isAuthenticated && isOnboarded ? (
+              <Layout showSidear={true}>
+                <NotificationPage />
+              </Layout>
+            ) : (
+              <Navigate to={isOnboarded ? "/" : "/onboarding"} />
+            )
           }
         />
         <Route
@@ -67,7 +75,7 @@ function App() {
           element={isAuthenticated ? <CallPage /> : <Navigate to={"/login"} />}
         />
         <Route
-          path="/chat"
+          path="/chat/:id"
           element={isAuthenticated ? <ChatPage /> : <Navigate to={"/login"} />}
         />
       </Routes>
