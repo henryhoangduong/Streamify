@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getStreamToken } from "../lib/api";
 import useAuthUser from "../hooks/useAuthUser.js";
 import { toast } from "react-hot-toast";
-import ChatLoader from "../components/ChatLoader.jsx";
+import { ChatLoader } from "../components/ChatLoader.jsx";
 import CallButton from "../components/CallButton.jsx";
 import {
   Channel,
