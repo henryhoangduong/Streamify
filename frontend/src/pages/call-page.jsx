@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useAuthUser from "../hooks/useAuthUser";
 import { useQuery } from "@tanstack/react-query";
 import { getStreamToken } from "../lib/api";
@@ -65,9 +65,32 @@ const CallPage = () => {
   if (isLoading) return <PageLoader />;
   return (
     <div className="h-screen flex flex-col items-center justify-center">
-      <div></div>
+      <div className="relative">
+        {client && call ? (
+          <StreamVideo client={clien}>
+            <StreamCall call={call}>
+              <CallContent />
+            </StreamCall>
+          </StreamVideo>
+        ) : (
+          <div>
+            <p>Could not initialize call. Please refresh or try again later.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
-
+const CallContent = () => {
+  const { useCallCallingState } = useCallStateHooks();
+  const callingState = useCallCallingState();
+  const navigate = useNavigate();
+  if (callingState == CallingState.LEFT) return navigate("/");
+  return (
+    <StreamTheme>
+      <SpeakerLayout />
+      <CallControls />
+    </StreamTheme>
+  );
+};
 export default CallPage;
