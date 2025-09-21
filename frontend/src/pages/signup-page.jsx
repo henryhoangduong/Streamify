@@ -4,7 +4,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import image from "../../public/i.png";
 import { signup } from "../lib/api";
+import { useThemeStore } from "../store/useThemeStore";
 const SignUpPage = () => {
+  const { theme } = useThemeStore();
   const [signUpData, setSignUpData] = useState({
     fullName: "",
     email: "",
@@ -22,7 +24,7 @@ const SignUpPage = () => {
   return (
     <div
       className="h-screen flex items-center justify-center p-4 sm:p-6 md:p-8"
-      data-theme="forest"
+      data-theme={theme}
     >
       <div className="border border-primary/25 flex flex-col lg:flex-row w-full max-w-5xl mx-auto bg-base-100 rounded-xl shadow-lg overflow-hidden">
         {/* SIGNUP FORM - LEFT SIDE */}
@@ -61,6 +63,7 @@ const SignUpPage = () => {
                   <input
                     type="text"
                     placeholder="John Doe"
+                    name="name"
                     className="input input-bordered w-full"
                     value={signUpData.fullName}
                     onChange={(e) => {

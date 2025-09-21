@@ -11,13 +11,15 @@ import {
   ShuffleIcon,
 } from "lucide-react";
 import { LANGUAGES } from "../constants/index.js";
+import { useNavigate } from "react-router-dom";
 
 const OnboardingPage = () => {
   const { authUser, isLoading } = useAuthUser();
+  const nav = useNavigate();
   const queryClient = useQueryClient();
   const [formState, setFormState] = useState({
     fullName: authUser?.fullName || "",
-    bio: authUser?.bio || "",
+    bio: authUser?.bio || "Just do it",
     nativeLanguage: authUser?.nativeLanguage || "",
     learningLanguage: authUser?.learningLanguage || "",
     location: authUser?.authUser || "",
@@ -25,14 +27,16 @@ const OnboardingPage = () => {
   });
   const { mutate, isPending, error } = useMutation({
     mutationFn: completeOnboarding,
-    onSuccess: () => {
-      toast.success("Profile onboarded successfully");
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-    },
   });
   const handleSubmit = async (e) => {
     e.preventDefault();
-    mutate(formState);
+    mutate(formState, {
+      onSuccess: () => {
+        toast.success("Profile onboarded successfully");
+        nav("/");
+        queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      },
+    });
   };
   const handleRandomAvatar = () => {
     const idx = Math.floor(Math.random() * 100) + 1;

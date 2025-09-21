@@ -6,7 +6,6 @@ import {
   getUserFriends,
   sendFriendRequest,
 } from "../lib/api";
-import { Link } from "react-router-dom";
 import {
   CheckCircleIcon,
   MapPinIcon,
@@ -15,11 +14,12 @@ import {
 } from "lucide-react";
 import FriendCard from "../components/FriendCard";
 import NoFriendsFound from "../components/NoFriendsFound";
-
+import { LANGUAGE_TO_FLAG } from "../constants/index.js";
+import { Link } from "react-router";
 const HomePage = () => {
   const queryClient = useQueryClient();
 
-  const [outgoingRequestsIds, setOutgoingRequestsIds] = useState([]);
+  const [outgoingRequestsIds, setOutgoingRequestsIds] = useState(new Set());
   const { data: friends = [], isLoading: LoadingFriends } = useQuery({
     queryKey: ["friends"],
     queryFn: getUserFriends,
@@ -28,11 +28,12 @@ const HomePage = () => {
     queryKey: ["users"],
     queryFn: getRecommendedUsers,
   });
-  const { data: outgoingFriendReqs } = useQuery({
-    queryKey: ["outgoingFriendsReqs"],
-    queryFn: getOutGoingFriendReqs,
-  });
-  const { mutate: sendRequestMuation } = useMutation({
+  const { data: outgoingFriendReqs, isLoading: isLoadingOutgoingFriendReqs } =
+    useQuery({
+      queryKey: ["outgoingFriendReqs"],
+      queryFn: getOutGoingFriendReqs,
+    });
+  const { mutate: sendRequestMutation, isPending } = useMutation({
     mutationFn: sendFriendRequest,
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ["outgoingFriendReqs"] }),
@@ -47,8 +48,11 @@ const HomePage = () => {
     }
   }, [outgoingFriendReqs]);
 
+  useEffect(() => {
+    console.log("outgoingRequestsIds: ", outgoingRequestsIds);
+  }, [outgoingRequestsIds]);
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
+    <div className="p-4 sm:p-6 lg:p-8 ">
       <div className="container mx-auto space-y-10">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
@@ -67,9 +71,10 @@ const HomePage = () => {
           <NoFriendsFound />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {friends.map((friend) => (
-              <FriendCard key={friend._id} friend={friend} />
-            ))}
+            {friends.length > 0 &&
+              friends.map((friend) => (
+                <FriendCard key={friend._id} friend={friend} />
+              ))}
           </div>
         )}
         <section>
@@ -101,10 +106,10 @@ const HomePage = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {recommendedUsers.map((user) => {
-                const hasRequestBeenSetnt = outgoingFriendReqs.has(user._id);
+                const hasRequestBeenSent = outgoingRequestsIds.has(user._id);
                 return (
                   <div
-                    className="card bg-base-200 hover:shadow-lg transition-all duration-300"
+                    className="card bg-base-300 hover:shadow-lg transition-all duration-300"
                     key={user._id}
                   >
                     <div className="card-body p-5 space-y-4">
@@ -125,12 +130,12 @@ const HomePage = () => {
                         </div>
                       </div>
                       {/* LANGUAGE WITH FLAGS */}
-                      <div className="flex flex-wrap gap-1.5 mb-3">
-                        <span>
+                      <div className="flex flex-row flex-wrap gap-1 mb-3">
+                        <span className="badge badge-primary">
                           {getLanguageFlag(user.nativeLanguage)} Native:{" "}
                           {user.nativeLanguage}
                         </span>
-                        <span>
+                        <span className="badge badge-outline">
                           {getLanguageFlag(user.nativeLanguage)} Learning:{" "}
                           {user.learningLanguage}
                         </span>
@@ -140,11 +145,13 @@ const HomePage = () => {
                       )}
                       {/* Action Button */}
                       <button
+                        onClick={() => sendRequestMutation(user._id)}
+                        disabled={hasRequestBeenSent || isPending}
                         className={`btn w-full ${
-                          hasRequestBeenSetnt ? "btn-disabled" : "btn-primary"
+                          hasRequestBeenSent ? "btn-disabled" : "btn-primary"
                         }`}
                       >
-                        {hasRequestBeenSetnt ? (
+                        {hasRequestBeenSent ? (
                           <>
                             <CheckCircleIcon className="size-4 mr-2" />
                             Request Sent
@@ -152,7 +159,7 @@ const HomePage = () => {
                         ) : (
                           <>
                             <UserPlusIcon className="size-4 mr-2" />
-                            Request Sent
+                            Send Request
                           </>
                         )}
                       </button>

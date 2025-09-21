@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { login } from "../lib/api";
 import { ShipWheelIcon } from "lucide-react";
 import image from "../../public/i.png";
 import { Loader2 } from "lucide-react";
 import useLogin from "../hooks/useLogin";
+import { Link } from "react-router";
+
 const LoginPage = () => {
   const [loginData, setLoginData] = useState({
     email: "",
@@ -81,6 +81,14 @@ const LoginPage = () => {
                 >
                   {isPending && <Loader2 className="animate-spin" />} Sign In
                 </button>
+                <div className="text-center mt-4">
+                  <p className="text-sm">
+                    Don't have an account?{" "}
+                    <Link to="/signup" className="text-primary hover:underline">
+                      Create one
+                    </Link>
+                  </p>
+                </div>
               </div>
             </form>
           </div>

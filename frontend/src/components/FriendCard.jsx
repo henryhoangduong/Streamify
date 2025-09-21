@@ -1,6 +1,6 @@
 import React from "react";
 import { LANGUAGE_TO_FLAG } from "../constants/index.js";
-
+import { Link } from "react-router";
 const FriendCard = (friend) => {
   return (
     <div className="card bg-base-200 hover:shadow-md transition-shadow">
@@ -14,11 +14,11 @@ const FriendCard = (friend) => {
         </div>
         {/* LANGUAGE WITH FLAGS */}
         <div className="flex flex-wrap gap-1.5 mb-3">
-          <span>
+          <span className="badge badge-secondary text-xs">
             {getLanguageFlag(friend.nativeLanguage)} Native:{" "}
             {friend.nativeLanguage}
           </span>
-          <span>
+          <span className="badge badge-outline text-xs">
             {getLanguageFlag(friend.nativeLanguage)} Learning:{" "}
             {friend.learningLanguage}
           </span>

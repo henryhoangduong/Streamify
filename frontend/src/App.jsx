@@ -88,6 +88,7 @@ function App() {
           path="/chat/:id"
           element={isAuthenticated ? <ChatPage /> : <Navigate to={"/login"} />}
         />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );

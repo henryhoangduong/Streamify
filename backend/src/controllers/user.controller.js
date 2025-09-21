@@ -5,11 +5,12 @@ export const getRecommendedUsers = async (req, res) => {
   try {
     const currentUserId = req.user.id;
     const currentUser = req.user;
+
     const recommendedUser = await User.find({
       $and: [
         { _id: { $ne: currentUserId } },
         {
-          $id: { $nin: currentUser.friends },
+          id: { $nin: currentUser.friends },
         },
         {
           isOnboarded: true,
@@ -132,7 +133,7 @@ export const getFriendRequests = async (req, res) => {
     }).populate("recipient", "fullName profilePic ");
     return res.status(200).json({
       incomingRequests,
-      acceptFriendRequest,
+      acceptReqs,
     });
   } catch (error) {
     console.error("Error in getFriendRequests controller", error);
@@ -143,15 +144,13 @@ export const getFriendRequests = async (req, res) => {
 export const getOutGoingFriendReqs = async (req, res) => {
   try {
     const outgoingRequests = await FriendRequest.find({
-      recipient: req.user.id,
+      sender: req.user.id,
       status: "pending",
     }).populate(
       "recipient",
       "fullName profilePic nativeLanguage learningLanguage"
     );
-    return res.status(200).json({
-      outgoingRequests,
-    });
+    return res.status(200).json(outgoingRequests);
   } catch (error) {
     console.error("Error in getOutGoingFriendReqs controller", error);
     return res.status(500).json({ message: "Internal server error" });

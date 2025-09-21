@@ -7,7 +7,7 @@ export const Layout = ({ children, showSidear = false }) => {
         {showSidear && <Sidebar />}
         <div className="flex flex-col flex-1">
           <Navbar />
-          <main className="">{children}</main>
+          <main className="bg-base-200">{children}</main>
         </div>
       </div>
     </div>
